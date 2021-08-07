@@ -1,0 +1,19 @@
+{
+	"name": "ryuko",
+	"repository": "https://github.com/jacany/ryuko-rewrite",
+	"scripts": {
+		"build": "tsc -b",
+		"watch": "tsc -b --watch"
+	},
+	"author": "Jack C <jack@chaker.net>",
+	"private": true,
+	"workspaces": [
+		"bot",
+		"handler"
+	],
+	"devDependencies": {
+		"@types/node": "^16.4.13",
+		"prettier": "^2.3.2",
+		"typescript": "^4.3.5"
+	}
+}

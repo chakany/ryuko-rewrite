@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"incremental": true,
+		"moduleResolution": "node",
+		"target": "es6",
+		"module": "commonjs",
+		"baseUrl": ".",
+		"rootDir": ".",
+		"outDir": "./dist",
+		"strict": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"@ryuko/handler": ["./handler"]
+		}
+	},
+	"references": [
+		{
+			"path": "bot"
+		},
+		{
+			"path": "handler"
+		}
+	],
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
+}
