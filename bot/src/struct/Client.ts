@@ -1,10 +1,12 @@
 import { Intents } from "discord.js";
-import { Client as HandlerClient, Handler } from "@ryuko/handler";
+import { Client as HandlerClient, ListenerHandler } from "@ryuko/handler";
 import path from "path";
 import config from "../../../config.json";
 
 export default class Client extends HandlerClient {
 	public config: typeof config;
+
+	public listenerHandler: ListenerHandler;
 
 	constructor() {
 		super({
@@ -13,17 +15,14 @@ export default class Client extends HandlerClient {
 
 		this.config = config;
 
-		try {
-			const handler = new Handler(path.join(__dirname, "../modules"), {
+		this.listenerHandler = new ListenerHandler(
+			path.resolve(__dirname, "../listeners"),
+			{
 				client: this,
-			});
+			}
+		);
 
-			handler.loadAll();
-
-			console.log(handler.modules);
-		} catch (error) {
-			console.error(error);
-		}
+		this.listenerHandler.loadAll();
 	}
 
 	start() {

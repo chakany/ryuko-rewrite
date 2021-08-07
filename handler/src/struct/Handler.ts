@@ -39,7 +39,7 @@ export default class Handler extends EventEmitter {
 		this.categories = new Collection();
 	}
 
-	private register(mod: Module) {
+	public register(mod: Module) {
 		mod.client = this.client;
 		mod.handler = this;
 

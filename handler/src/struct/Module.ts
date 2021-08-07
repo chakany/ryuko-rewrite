@@ -3,7 +3,7 @@ import Client from "./Client";
 import { Collection } from "discord.js";
 
 export interface ModuleOptions {
-	category: string;
+	category?: string;
 }
 
 export default class Module {
