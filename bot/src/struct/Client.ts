@@ -8,10 +8,15 @@ import path from "path";
 import config from "../../../config.json";
 import Listener from "./Listener";
 import Command from "./Command";
+import Db from "../util/Db";
+import Settings from "./Settings";
 
 declare module "@ryuko/handler" {
 	interface Client {
 		config: typeof config;
+		db: Db;
+		guildSettings: Settings;
+
 		commandHandler: CommandHandler;
 		listenerHandler: ListenerHandler;
 	}
@@ -19,6 +24,8 @@ declare module "@ryuko/handler" {
 
 export default class Client extends HandlerClient {
 	public config: typeof config;
+	public db: Db;
+	public guildSettings: Settings;
 
 	public commandHandler: CommandHandler;
 	public listenerHandler: ListenerHandler;
@@ -29,6 +36,8 @@ export default class Client extends HandlerClient {
 		});
 
 		this.config = config;
+		this.db = new Db();
+		this.guildSettings = new Settings(this.db.guilds);
 
 		this.commandHandler = new CommandHandler(
 			path.resolve(__dirname, "../commands"),
@@ -52,7 +61,9 @@ export default class Client extends HandlerClient {
 		this.listenerHandler.loadAll();
 	}
 
-	start() {
+	async start() {
+		await this.guildSettings.init();
+
 		super.login(config.token);
 	}
 }

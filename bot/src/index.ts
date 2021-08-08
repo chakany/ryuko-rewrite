@@ -1,6 +1,11 @@
 import { ShardingManager } from "discord.js";
 import path from "path";
 import config from "../../config.json";
+import Db from "./util/Db";
+
+const db = new Db();
+
+db.sync({ alter: true });
 
 const manager = new ShardingManager(
 	process.env.NODE_ENV == "production"

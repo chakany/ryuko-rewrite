@@ -20,7 +20,7 @@ export default abstract class Listener extends HandlerCommand {
 		type: string,
 		description: string
 	) {
-		return new Embed(
+		return this.embed(
 			{
 				author: {
 					name: `❌ Error: ${interaction.commandName}`,
