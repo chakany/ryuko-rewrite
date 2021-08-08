@@ -11,12 +11,16 @@ export default class ListenerHandler extends Handler {
 
 	constructor(
 		dir: string,
-		{ client, extensions = [".ts", ".js"] }: ListenerHandlerOptions
+		{
+			client,
+			extensions = [".ts", ".js"],
+			classToHandle = Listener,
+		}: ListenerHandlerOptions
 	) {
 		super(dir, {
 			client,
 			extensions,
-			classToHandle: Listener,
+			classToHandle,
 		});
 
 		this.emitters = new Collection();
@@ -52,5 +56,11 @@ export default class ListenerHandler extends Handler {
 
 		(<EventEmitter>emitter).on(listener.event, listener.exec);
 		return listener;
+	}
+
+	public attach(id: string, emitter: EventEmitter): ListenerHandler {
+		this.emitters.set(id, emitter);
+
+		return this;
 	}
 }

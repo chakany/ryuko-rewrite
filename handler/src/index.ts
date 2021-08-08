@@ -6,6 +6,9 @@ import Category from "./struct/Category";
 import Listener from "./struct/listener/Listener";
 import ListenerHandler from "./struct/listener/ListenerHandler";
 
+import Command from "./struct/command/Command";
+import CommandHandler from "./struct/command/CommandHandler";
+
 export {
 	// Core
 	Client,
@@ -15,4 +18,7 @@ export {
 	// Listeners
 	Listener,
 	ListenerHandler,
+	// Commands
+	Command,
+	CommandHandler,
 };

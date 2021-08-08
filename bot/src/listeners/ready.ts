@@ -1,4 +1,4 @@
-import { Listener } from "@ryuko/handler";
+import Listener from "../struct/Listener";
 
 export default class ReadyListener extends Listener {
 	constructor() {
@@ -10,5 +10,6 @@ export default class ReadyListener extends Listener {
 
 	exec() {
 		console.log(`Logged in as ${this.client!.user!.tag}`);
+		this.client!.commandHandler.registerSlashCommands();
 	}
 }

@@ -1,4 +1,4 @@
-import { Listener } from "@ryuko/handler";
+import Listener from "../struct/Listener";
 import { Interaction } from "discord.js";
 
 export default class InteractionCreateListener extends Listener {
@@ -15,8 +15,6 @@ export default class InteractionCreateListener extends Listener {
 
 		await interaction.deferReply();
 
-		await interaction.editReply({
-			content: `Hello! I am an in-development version of Ryuko! Built to replace the current version that runs Discord.js v12, everything is custom made, and uses slash commands!`,
-		});
+		this.client!.commandHandler.handle(interaction);
 	}
 }

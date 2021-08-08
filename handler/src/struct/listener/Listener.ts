@@ -19,5 +19,5 @@ export default abstract class Listener extends Module {
 		this.type = type;
 	}
 
-	abstract exec(args?: any): any | Promise<any>;
+	abstract exec(...args: any): any | Promise<any>;
 }
