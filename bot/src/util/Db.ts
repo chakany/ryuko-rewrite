@@ -1,5 +1,6 @@
 import { Sequelize, ModelCtor } from "sequelize";
-import config from "../../../config.json";
+const config = require("../../config.json");
+import Logger from "../struct/Logger";
 
 // Tables
 import filteredPhrasesModel from "../models/filteredPhrases";
@@ -20,9 +21,13 @@ export default class Db extends Sequelize {
 	public xp: ModelCtor<any>;
 
 	constructor() {
+		const log = new Logger({
+			name: "db",
+		});
 		super({
 			dialect: "sqlite",
 			storage: "./test.db",
+			logging: (info) => log.debug(info),
 		});
 
 		this.filteredPhrases = filteredPhrasesModel(this);

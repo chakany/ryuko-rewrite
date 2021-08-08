@@ -3,10 +3,11 @@
 	"version": "2.0.0",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "cross-env NODE_ENV=production node .",
-		"dev": "ts-node-dev --transpile-only --deps --respawn src/index.ts"
+		"start": "cross-env NODE_ENV=production node . | bunyan -L -o short",
+		"dev": "ts-node-dev --transpile-only --deps --respawn src/index.ts | bunyan -L -o long"
 	},
 	"devDependencies": {
+		"@types/bunyan": "^1.8.7",
 		"@types/ms": "^0.7.31",
 		"@types/validator": "^13.6.3",
 		"cross-env": "^7.0.3",
@@ -16,6 +17,7 @@
 	},
 	"dependencies": {
 		"@ryuko/handler": "^1.0.0",
+		"bunyan": "^1.8.15",
 		"discord.js": "^13.0.1",
 		"kurasuta": "^2.2.3",
 		"mariadb": "^2.5.4",

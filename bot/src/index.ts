@@ -1,7 +1,12 @@
 import { ShardingManager } from "discord.js";
 import path from "path";
-import config from "../../config.json";
+const config = require("../config.json");
 import Db from "./util/Db";
+import Logger from "./struct/Logger";
+
+const log = new Logger({
+	name: "manager",
+});
 
 const db = new Db();
 
@@ -18,7 +23,7 @@ const manager = new ShardingManager(
 );
 
 manager.on("shardCreate", (shard) => {
-	console.log(`Spawned Shard at ID ${shard.id}`);
+	log.info(`Spawned shard ${shard.id}`);
 });
 
 manager.spawn();
