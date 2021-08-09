@@ -1,5 +1,12 @@
 {
 	"prefix": "r!",
 	"token": "",
-	"owner": [""]
+	"owner": [""],
+	"db": {
+		"host": "",
+		"port": 3306,
+		"username": "",
+		"password": "",
+		"database": ""
+	}
 }

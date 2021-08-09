@@ -1,4 +1,4 @@
-import { Intents } from "discord.js";
+import { Intents, MessageEmbed, Guild, TextChannel } from "discord.js";
 import {
 	Client as HandlerClient,
 	ListenerHandler,
@@ -6,6 +6,7 @@ import {
 } from "@ryuko/handler";
 import path from "path";
 const config = require("../../config.json");
+const emoji = require("../../emojis.json");
 import Listener from "./Listener";
 import Command from "./Command";
 import Db from "../util/Db";
@@ -18,6 +19,8 @@ declare module "@ryuko/handler" {
 		db: Db;
 		guildSettings: Settings;
 		log: Logger;
+		emoji: any;
+		sendToLog(embed: MessageEmbed, guild: Guild): void;
 
 		commandHandler: CommandHandler;
 		listenerHandler: ListenerHandler;
@@ -29,6 +32,7 @@ export default class Client extends HandlerClient {
 	public db: Db;
 	public guildSettings: Settings;
 	public log: Logger;
+	public emoji: any;
 
 	public commandHandler: CommandHandler;
 	public listenerHandler: ListenerHandler;
@@ -44,6 +48,7 @@ export default class Client extends HandlerClient {
 		this.log = new Logger({
 			name: "bot",
 		});
+		this.emoji = emoji;
 
 		this.commandHandler = new CommandHandler(
 			path.resolve(__dirname, "../commands"),
@@ -74,5 +79,16 @@ export default class Client extends HandlerClient {
 		await this.guildSettings.init();
 
 		super.login(config.token);
+	}
+
+	sendToLog(embed: MessageEmbed, guild: Guild): void {
+		if (this.guildSettings.get(guild.id, "logging", false))
+			(<TextChannel>(
+				guild.channels.cache.get(
+					this.guildSettings.get(guild.id, "loggingChannel", null)
+				)
+			))?.send({
+				embeds: [embed],
+			});
 	}
 }

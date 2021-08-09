@@ -12,6 +12,31 @@ export default class MessageCreateListener extends Listener {
 	async exec(message: Message) {
 		if (message.channel.type == "DM") return;
 
+		// Put content through filter
+		if (this.client.guildSettings.get(message.guild!.id, "filter", false)) {
+			const filteredPhrases = await this.client.db.getFilteredPhrases(
+				message.guild!.id
+			);
+
+			const phrases = filteredPhrases.map((col: any) => col.phrase);
+
+			if (phrases.length) {
+				const regex = new RegExp(
+					`^(.*?(${phrases.join("|")})[^$]*)$`,
+					"gim"
+				);
+
+				if (regex.test(message.content)) {
+					message.delete();
+					message.author.send(
+						`Please do not use filtered words in **${
+							message.guild!.name
+						}**!`
+					);
+				}
+			}
+		}
+
 		if (
 			!message.content.startsWith(
 				this.client!.guildSettings.get(
