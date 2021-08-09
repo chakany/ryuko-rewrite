@@ -95,7 +95,7 @@ export default class CommandHandler extends Handler {
 									name: command.name,
 									description: command.description,
 									type: "SUB_COMMAND",
-									options: command.args,
+									options: command.options,
 								},
 							],
 						});
@@ -109,21 +109,21 @@ export default class CommandHandler extends Handler {
 								name: command.name,
 								description: command.description,
 								type: "SUB_COMMAND",
-								options: command.args,
+								options: command.options,
 							});
 					}
 				} else if (!command.category) {
 					commands.push({
 						name: command.name,
 						description: command.description,
-						options: command.args,
+						options: command.options,
 					});
 				} else {
 					constructedCategory.options!.push({
 						name: command.name,
 						description: command.description,
 						type: "SUB_COMMAND",
-						options: command.args,
+						options: command.options,
 					});
 				}
 			}

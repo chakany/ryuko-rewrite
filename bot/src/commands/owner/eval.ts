@@ -7,7 +7,7 @@ export default class EvalCommand extends Command {
 			name: "eval",
 			description: "Evaluate JavaScript on the bot's behalf",
 			category: "owner",
-			args: [
+			options: [
 				{
 					name: "input",
 					type: "STRING",

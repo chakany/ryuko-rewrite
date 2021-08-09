@@ -5,14 +5,14 @@ export interface CommandOptions extends ModuleOptions {
 	name: string;
 	description?: string;
 	group?: string | undefined;
-	args?: ApplicationCommandOptionData[];
+	options?: ApplicationCommandOptionData[];
 }
 
 export default abstract class Command extends Module {
 	public name: string;
 	public description: string;
 	public group?: string | undefined;
-	public args?: ApplicationCommandOptionData[];
+	public options?: ApplicationCommandOptionData[];
 
 	constructor(
 		id: string,
@@ -21,7 +21,7 @@ export default abstract class Command extends Module {
 			description = "",
 			category = "default",
 			group = undefined,
-			args = [],
+			options = [],
 		}: CommandOptions
 	) {
 		super(id, {
@@ -31,7 +31,7 @@ export default abstract class Command extends Module {
 		this.name = name;
 		this.description = description;
 		this.group = group;
-		this.args = args;
+		this.options = options;
 	}
 
 	abstract exec(interaction: Interaction): any | Promise<any>;
