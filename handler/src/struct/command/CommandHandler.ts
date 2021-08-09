@@ -3,19 +3,25 @@ import Command from "./Command";
 import {
 	CommandInteraction,
 	ApplicationCommandData,
-	ApplicationCommandOptionData,
+	Snowflake,
+	TextChannel,
 } from "discord.js";
 import Constants from "../../Constants";
 
-export interface CommandHandlerOptions extends HandlerOptions {}
+export interface CommandHandlerOptions extends HandlerOptions {
+	owner?: Snowflake | Snowflake[];
+}
 
 export default class CommandHandler extends Handler {
+	public owner: Snowflake | Snowflake[];
+
 	constructor(
 		dir: string,
 		{
 			client,
 			extensions = [".ts", ".js"],
 			classToHandle = Command,
+			owner = [],
 		}: CommandHandlerOptions
 	) {
 		super(dir, {
@@ -23,6 +29,8 @@ export default class CommandHandler extends Handler {
 			extensions,
 			classToHandle,
 		});
+
+		this.owner = owner;
 	}
 
 	public async handle(interaction: CommandInteraction) {
@@ -42,6 +50,8 @@ export default class CommandHandler extends Handler {
 				Constants.commandHandler.events.invalidCommand,
 				interaction
 			);
+
+		if (!(await this.runInhibitors(interaction, command))) return;
 
 		this.emit(
 			Constants.commandHandler.events.commandStarted,
@@ -67,26 +77,82 @@ export default class CommandHandler extends Handler {
 		);
 	}
 
+	private async runInhibitors(
+		interaction: CommandInteraction,
+		command: Command
+	): Promise<boolean> {
+		// Check Owner Permissions
+		if (command.ownerOnly && !this.owner.includes(interaction.user.id)) {
+			this.emit(
+				Constants.commandHandler.events.owner,
+				interaction,
+				command
+			);
+
+			return false;
+		}
+
+		// Check Client Permissions
+		if (command.clientPermissions.length) {
+			const missing = (<TextChannel>interaction.channel!)
+				.permissionsFor(interaction.guild!.me!)
+				.missing(command.clientPermissions);
+
+			if (missing.length) {
+				this.emit(
+					Constants.commandHandler.events.missingPermissions,
+					interaction,
+					command,
+					"client",
+					missing
+				);
+				return false;
+			}
+		}
+
+		// Check User Permissions
+		if (command.userPermissions.length) {
+			const missing = (<TextChannel>interaction.channel!)
+				.permissionsFor(interaction.user)!
+				.missing(command.userPermissions);
+
+			if (missing.length) {
+				this.emit(
+					Constants.commandHandler.events.missingPermissions,
+					interaction,
+					command,
+					"user",
+					missing
+				);
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	public async registerSlashCommands() {
 		const commands: ApplicationCommandData[] = [];
 
 		for (const category of this.categories.values()) {
-			let constructedCategory: ApplicationCommandData = {
-				name: category.id,
-				description: category.description,
-				options: [],
-				defaultPermission: true,
-			};
+			let constructedCategory: ApplicationCommandData;
+			if (category.id !== "default")
+				constructedCategory = {
+					name: category.id,
+					description: category.description,
+					options: [],
+					defaultPermission: true,
+				};
 
 			for (const command of category.values() as IterableIterator<Command>) {
 				// assume we in a subcommand or some goofy shit idk what i'm doing
 				if (command.group) {
 					if (
-						!constructedCategory.options!.find(
+						!constructedCategory!.options!.find(
 							(option) => option.name == command.group!
 						)
 					)
-						constructedCategory.options!.push({
+						constructedCategory!.options!.push({
 							name: command.group,
 							description: command.description,
 							type: "SUB_COMMAND_GROUP",
@@ -101,7 +167,7 @@ export default class CommandHandler extends Handler {
 						});
 					else {
 						// There is an existing group
-						constructedCategory
+						constructedCategory!
 							.options!.find(
 								(option) => option.name == command.group!
 							)!
@@ -112,14 +178,14 @@ export default class CommandHandler extends Handler {
 								options: command.options,
 							});
 					}
-				} else if (!command.category) {
+				} else if (command.categoryId == "default") {
 					commands.push({
 						name: command.name,
 						description: command.description,
 						options: command.options,
 					});
 				} else {
-					constructedCategory.options!.push({
+					constructedCategory!.options!.push({
 						name: command.name,
 						description: command.description,
 						type: "SUB_COMMAND",
@@ -128,7 +194,7 @@ export default class CommandHandler extends Handler {
 				}
 			}
 
-			commands.push(constructedCategory);
+			if (category.id !== "default") commands.push(constructedCategory!);
 		}
 
 		// Update to global when release

@@ -1,5 +1,5 @@
 import Command from "../../struct/Command";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, MessageEmbed, Permissions } from "discord.js";
 
 export default class EvalCommand extends Command {
 	constructor() {
@@ -15,6 +15,7 @@ export default class EvalCommand extends Command {
 					required: true,
 				},
 			],
+			ownerOnly: true,
 		});
 	}
 

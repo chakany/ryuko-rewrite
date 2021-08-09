@@ -5,6 +5,8 @@ export = {
 			commandFinished: "commandFinished",
 			invalidCommand: "invalidCommand",
 			error: "error",
+			owner: "ownerOnly",
+			missingPermissions: "missingPermissions",
 		},
 	},
 };

@@ -19,10 +19,11 @@ export default abstract class Listener extends HandlerListener {
 		type: string,
 		description: string
 	) {
+		const commandName = interaction.commandName;
 		return this.embed(
 			{
 				author: {
-					name: `❌ Error: ${interaction.commandName}`,
+					name: `❌ Error: ${commandName}`,
 				},
 				title: type,
 				description,

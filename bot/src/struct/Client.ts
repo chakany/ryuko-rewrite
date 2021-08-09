@@ -50,6 +50,7 @@ export default class Client extends HandlerClient {
 			{
 				client: this,
 				classToHandle: Command,
+				owner: this.config.owner,
 			}
 		);
 
