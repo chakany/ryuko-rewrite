@@ -143,6 +143,17 @@ export default class CommandHandler extends Handler {
 			}
 		}
 
+		// Check NSFW
+		if (command.nsfw && !(<TextChannel>interaction.channel)!.nsfw) {
+			this.emit(
+				Constants.commandHandler.events.nsfw,
+				interaction,
+				command
+			);
+
+			return false;
+		}
+
 		return true;
 	}
 

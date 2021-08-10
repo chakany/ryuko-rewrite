@@ -1,4 +1,10 @@
-import { Intents, MessageEmbed, Guild, TextChannel } from "discord.js";
+import {
+	Intents,
+	MessageEmbed,
+	Guild,
+	TextChannel,
+	Permissions,
+} from "discord.js";
 import {
 	Client as HandlerClient,
 	ListenerHandler,
@@ -21,6 +27,7 @@ declare module "@ryuko/handler" {
 		log: Logger;
 		emoji: any;
 		sendToLog(embed: MessageEmbed, guild: Guild): void;
+		invite(): string;
 
 		commandHandler: CommandHandler;
 		listenerHandler: ListenerHandler;
@@ -79,6 +86,13 @@ export default class Client extends HandlerClient {
 		await this.guildSettings.init();
 
 		super.login(config.token);
+	}
+
+	invite() {
+		return this.generateInvite({
+			permissions: Permissions.FLAGS.ADMINISTRATOR,
+			scopes: ["bot", "applications.commands"],
+		});
 	}
 
 	sendToLog(embed: MessageEmbed, guild: Guild): void {

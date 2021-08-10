@@ -11,6 +11,7 @@ export interface CommandOptions extends ModuleOptions {
 	group?: string | undefined;
 	options?: ApplicationCommandOptionData[];
 	ownerOnly?: boolean;
+	nsfw?: boolean;
 	clientPermissions?: bigint[];
 	userPermissions?: bigint[];
 }
@@ -21,6 +22,7 @@ export default abstract class Command extends Module {
 	public group: string | undefined;
 	public options: ApplicationCommandOptionData[];
 	public ownerOnly: boolean;
+	public nsfw?: boolean;
 	public clientPermissions: bigint[];
 	public userPermissions: bigint[];
 
@@ -35,6 +37,7 @@ export default abstract class Command extends Module {
 			ownerOnly = false,
 			clientPermissions = [],
 			userPermissions = [],
+			nsfw = false,
 		}: CommandOptions
 	) {
 		super(id, {
@@ -48,6 +51,7 @@ export default abstract class Command extends Module {
 		this.ownerOnly = ownerOnly;
 		this.clientPermissions = clientPermissions;
 		this.userPermissions = userPermissions;
+		this.nsfw = nsfw;
 	}
 
 	abstract exec(interaction: Interaction): any | Promise<any>;

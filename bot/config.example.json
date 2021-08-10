@@ -21,5 +21,6 @@
 	"clientSecret": "",
 	"siteUrl": "http://localhost:3000",
 	"recaptchaSecret": "",
-	"recaptchaSiteKey": ""
+	"recaptchaSiteKey": "",
+	"supportInvite": "https://discord.gg/AuFWE89VkY"
 }
