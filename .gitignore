@@ -13,6 +13,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Other Shit
 config.json
 test.db
+bot/app/static/styles
 
 # Runtime data
 pids

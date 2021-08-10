@@ -42,7 +42,7 @@ export default class FilterDisableCommand extends Command {
 			this.embed(
 				{
 					title: `Filter Disabled`,
-					footer: null!,
+					footer: {},
 					timestamp: new Date(),
 					thumbnail: {
 						url: interaction.user.displayAvatarURL({

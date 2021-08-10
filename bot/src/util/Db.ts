@@ -1,4 +1,4 @@
-import { Sequelize, ModelCtor } from "sequelize";
+import { Sequelize, ModelCtor, Op } from "sequelize";
 const config = require("../../config.json");
 import Logger from "../struct/Logger";
 import { Snowflake } from "discord.js";
@@ -64,6 +64,37 @@ export default class Db extends Sequelize {
 		return this.filteredPhrases.findAll({
 			where: {
 				guildId,
+			},
+		});
+	}
+
+	getMembersByIdentifier(cookieId = "", ipAddress = ""): Promise<any> {
+		return this.members.findOne({
+			attributes: ["id", "ipAddress", "cookieId", "verifiedAt"],
+			where: {
+				[Op.or]: [{ cookieId }, { ipAddress }],
+			},
+		});
+	}
+
+	addMember(id: Snowflake, cookieId: string, ipAddress: string) {
+		return this.members.upsert({
+			id,
+			cookieId,
+			ipAddress,
+			verifiedAt: new Date(),
+		});
+	}
+
+	getCurrentUserPunishments(memberId: string, guildId: string) {
+		return this.punishments.findAll({
+			where: {
+				memberId,
+				guildId,
+				unpunished: false,
+				expires: {
+					[Op.gte]: new Date(),
+				},
 			},
 		});
 	}

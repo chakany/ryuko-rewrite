@@ -48,7 +48,7 @@ export default class FilterAddCommand extends Command {
 			this.embed(
 				{
 					title: `Phrase added to Filter`,
-					footer: null!,
+					footer: {},
 					timestamp: new Date(),
 					thumbnail: {
 						url: interaction.user.displayAvatarURL({

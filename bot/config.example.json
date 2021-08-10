@@ -1,6 +1,7 @@
 {
 	"prefix": "r!",
 	"token": "",
+	"port": 3030,
 	"owner": [""],
 	"db": {
 		"host": "",

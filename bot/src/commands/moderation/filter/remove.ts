@@ -48,7 +48,7 @@ export default class FilterRemoveCommand extends Command {
 			this.embed(
 				{
 					title: `Phrase removed from Filter`,
-					footer: null!,
+					footer: {},
 					timestamp: new Date(),
 					thumbnail: {
 						url: interaction.user.displayAvatarURL({
