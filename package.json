@@ -2,7 +2,7 @@
 	"name": "ryuko",
 	"repository": "https://github.com/jacany/ryuko-rewrite",
 	"scripts": {
-		"build": "tsc -b",
+		"build": "tsc -b && sass bot/src/styles:bot/app/static/styles",
 		"watch": "tsc -b --watch"
 	},
 	"author": "Jack C <jack@chaker.net>",
