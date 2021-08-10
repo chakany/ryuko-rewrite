@@ -9,5 +9,17 @@
 		"username": "",
 		"password": "",
 		"database": ""
-	}
+	},
+	"redis": {
+		"host": "",
+		"port": 6379,
+		"family": 4,
+		"password": "",
+		"db": 0
+	},
+	"clientId": "",
+	"clientSecret": "",
+	"siteUrl": "http://localhost:3000",
+	"recaptchaSecret": "",
+	"recaptchaSiteKey": ""
 }

@@ -205,8 +205,10 @@ export default class CommandHandler extends Handler {
 		}
 
 		// Update to global when release
-		await this.client.guilds.cache
-			.get("867791409008607273")
-			?.commands.set(commands);
+		process.env.NODE_ENV == "production"
+			? this.client.application?.commands.set(commands)
+			: await this.client.guilds.cache
+					.get("867791409008607273")
+					?.commands.set(commands);
 	}
 }
