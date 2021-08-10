@@ -40,7 +40,7 @@ export default class EvalCommand extends Command {
 					this.embed(
 						{
 							title: "Eval Result",
-							description: `\`\`\`xl\n${this.clean(
+							description: `\`\`\`js\n${this.clean(
 								evaled
 							)}\`\`\``,
 						},
@@ -55,7 +55,7 @@ export default class EvalCommand extends Command {
 					this.embed(
 						{
 							title: "Eval Error",
-							description: `\`\`\`xl\n${error}\`\`\``,
+							description: `\`\`\`js\n${error}\`\`\``,
 						},
 						interaction.user,
 						interaction.guild!
