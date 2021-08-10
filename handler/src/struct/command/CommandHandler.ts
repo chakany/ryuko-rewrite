@@ -39,9 +39,17 @@ export default class CommandHandler extends Handler {
 
 		if (this.modules.get(interaction.commandName)) {
 			command = this.modules.get(interaction.commandName) as Command;
-		} else if (this.modules.get(interaction.options.getSubcommand())) {
-			command = this.modules.get(
-				interaction.options.getSubcommand()
+		} else if (
+			this.modules.find(
+				(command: any) =>
+					command.name == interaction.options.getSubcommand() &&
+					command.categoryId == interaction.command!.name
+			)
+		) {
+			command = this.modules.find(
+				(command: any) =>
+					command.name == interaction.options.getSubcommand() &&
+					command.categoryId == interaction.command!.name
 			) as Command;
 		} else {
 			command = this.modules.find(

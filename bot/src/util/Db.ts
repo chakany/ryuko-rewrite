@@ -98,4 +98,35 @@ export default class Db extends Sequelize {
 			},
 		});
 	}
+
+	findTicket(guildId: Snowflake, channelId: Snowflake) {
+		return this.tickets.findOne({
+			where: {
+				guildId,
+				channelId,
+			},
+		});
+	}
+
+	addTicket(guildId: Snowflake, memberId: Snowflake, channelId: Snowflake) {
+		return this.tickets.create({
+			guildId,
+			memberId,
+			channelId,
+		});
+	}
+
+	deleteTicket(
+		guildId: Snowflake,
+		memberId: Snowflake,
+		channelId: Snowflake
+	) {
+		return this.tickets.destroy({
+			where: {
+				guildId,
+				memberId,
+				channelId,
+			},
+		});
+	}
 }
