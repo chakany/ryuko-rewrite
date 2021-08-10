@@ -36,14 +36,15 @@ router.get("/:category", async function (req, res) {
 				description: "Page Not Found",
 			});
 		else if (!category && page) {
-			if (process.env.NODE_ENV !== "production")
-				return res.render("wiki", {
-					avatar: user.avatarURL,
-					username: user.username,
-					page: path.resolve(wiki.dir, page.file),
-					categories: wiki.categories,
-					prefix,
-				});
+			//if (process.env.NODE_ENV !== "production")
+			return res.render("wiki", {
+				avatar: user.avatarURL,
+				username: user.username,
+				page: path.resolve(wiki.dir, page.file),
+				categories: wiki.categories,
+				prefix,
+			});
+			/** 
 			else
 				return res.sendFile(
 					`${process.cwd()}/pages/wiki/${page.file.replace(
@@ -51,6 +52,7 @@ router.get("/:category", async function (req, res) {
 						".html"
 					)}`
 				);
+				*/
 		}
 
 		return res.redirect(`${category!.files[0].file.replace(".ejs", "")}`);
@@ -87,20 +89,21 @@ router.get("/:category/:file", async function (req, res) {
 				description: "Page Not Found",
 			});
 
-		if (process.env.NODE_ENV !== "production")
-			return res.render("wiki", {
-				avatar: user.avatarURL,
-				username: user.username,
-				prefix,
-				page: path.resolve(wiki.dir, category.file, file.file),
-				categories: wiki.categories,
-			});
+		//if (process.env.NODE_ENV !== "production")
+		return res.render("wiki", {
+			avatar: user.avatarURL,
+			username: user.username,
+			prefix,
+			page: path.resolve(wiki.dir, category.file, file.file),
+			categories: wiki.categories,
+		});
+		/**
 		else
 			return res.sendFile(
 				`${process.cwd()}/pages/wiki/${
 					category.file
 				}/${file.file.replace(".ejs", ".html")}`
-			);
+			);*/
 	} catch (err) {
 		weblog.error(err);
 		return res.status(500).render("error", {

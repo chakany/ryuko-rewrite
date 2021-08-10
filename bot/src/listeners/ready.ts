@@ -31,7 +31,11 @@ export default class ReadyListener extends Listener {
 				: [
 						{
 							type: "PLAYING",
-							text: `https://ryuko.cc`,
+							text: `${this.client.config.siteUrl}`,
+						},
+						{
+							type: "PLAYING",
+							text: `with slash commands`,
 						},
 				  ];
 		let i = 0;
