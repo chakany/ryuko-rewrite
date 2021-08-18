@@ -6,7 +6,7 @@ import Db from "../util/Db";
 
 const db = new Db();
 
-import { weblog as log, redis, user } from "../index";
+import { redis, user } from "../index";
 
 const {
 	clientId,
@@ -53,7 +53,7 @@ async function checkCaptcha(response: any): Promise<any> {
 const router = express.Router();
 
 // Our main route
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
 	if (!req.query.state)
 		return res.status(400).render("error", {
 			username: user.username,
@@ -114,13 +114,7 @@ router.get("/", async (req, res) => {
 					redirectUri: null,
 				});
 		} catch (error) {
-			log.error(error);
-			res.status(500).render("error", {
-				username: user.username,
-				avatar: user.avatarURL,
-				code: 500,
-				description: "Internal Server Error",
-			});
+			next(error);
 		}
 	} else
 		return res.status(400).render("error", {
@@ -131,7 +125,7 @@ router.get("/", async (req, res) => {
 		});
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
 	if (!req.body["g-recaptcha-response"] || !req.body.state || !req.body.id)
 		return res.status(400).render("error", {
 			username: user.username,
@@ -198,13 +192,7 @@ router.post("/", async (req, res) => {
 			redis.removeVerification(req.body.state);
 		}
 	} catch (error) {
-		log.error(error);
-		return res.status(500).render("error", {
-			username: user.username,
-			avatar: user.avatarURL,
-			code: 500,
-			description: "Internal Server Error",
-		});
+		next(error);
 	}
 });
 

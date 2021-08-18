@@ -3,7 +3,7 @@ import path from "path";
 const config = require("../config.json");
 import Db from "./util/Db";
 import Logger from "./struct/Logger";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import Redis from "./util/Redis";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -12,6 +12,8 @@ import cookieParser from "cookie-parser";
 import homeRoute from "./routes/home";
 import wikiRoute from "./routes/wiki";
 import verifyRoute from "./routes/verify";
+import commandsRoute from "./routes/commands";
+
 const log = new Logger({
 	name: "manager",
 });
@@ -61,6 +63,7 @@ manager.on("shardCreate", (shard) => {
 		webserver.use("/", homeRoute);
 		webserver.use("/wiki", wikiRoute);
 		webserver.use("/verify", verifyRoute);
+		webserver.use("/commands", commandsRoute);
 
 		// This should always be last
 		webserver.get("*", function (req, res) {
@@ -71,6 +74,22 @@ manager.on("shardCreate", (shard) => {
 				description: "Page Not Found",
 			});
 		});
+
+		// Internal Error handler
+		webserver.use(
+			(error: any, req: Request, res: Response, next: NextFunction) => {
+				// Log to console
+				weblog.error(error.stack);
+
+				// Return error page
+				res.status(500).render("error", {
+					username: user.username,
+					avatar: user.avatarURL,
+					code: 500,
+					description: "Internal Server Error",
+				});
+			}
+		);
 
 		webserver.listen(config.port, () => {
 			weblog.info(`Listening on Port ${config.port}`);

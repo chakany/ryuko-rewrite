@@ -4,26 +4,20 @@ import Wiki from "../struct/Wiki";
 
 const { prefix } = require("../../config.json");
 
-import { weblog as log, user } from "../index";
+import { user } from "../index";
 
 const wiki = new Wiki("../../app/wiki");
 
 const router = express.Router();
-router.get("/", async function (req, res) {
+router.get("/", async function (req, res, next) {
 	try {
 		res.redirect("/wiki/Home");
-	} catch (err) {
-		log.error(err);
-		return res.status(500).render("error", {
-			username: user.username,
-			avatar: user.avatarURL,
-			code: 500,
-			description: "Internal Server Error",
-		});
+	} catch (error) {
+		next(error);
 	}
 });
 
-router.get("/:category", async function (req, res) {
+router.get("/:category", async function (req, res, next) {
 	try {
 		const category = wiki.findCategory(req.params.category);
 		const page = wiki.findPage(wiki.categories[0], req.params.category);
@@ -46,18 +40,12 @@ router.get("/:category", async function (req, res) {
 		}
 
 		return res.redirect(`${category!.files[0].file.replace(".ejs", "")}`);
-	} catch (err) {
-		log.error(err);
-		return res.status(500).render("error", {
-			username: user.username,
-			avatar: user.avatarURL,
-			code: 500,
-			description: "Internal Server Error",
-		});
+	} catch (error) {
+		next(error);
 	}
 });
 
-router.get("/:category/:file", async function (req, res) {
+router.get("/:category/:file", async function (req, res, next) {
 	try {
 		const category = wiki.findCategory(req.params.category);
 
@@ -86,14 +74,8 @@ router.get("/:category/:file", async function (req, res) {
 			page: path.resolve(wiki.dir, category.file, file.file),
 			categories: wiki.categories,
 		});
-	} catch (err) {
-		log.error(err);
-		return res.status(500).render("error", {
-			username: user.username,
-			avatar: user.avatarURL,
-			code: 500,
-			description: "Internal Server Error",
-		});
+	} catch (error) {
+		next(error);
 	}
 });
 

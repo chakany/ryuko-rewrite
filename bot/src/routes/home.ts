@@ -2,10 +2,10 @@ import express from "express";
 
 const { supportInvite } = require("../../config.json");
 
-import { manager, weblog as log, user } from "../index";
+import { manager, user } from "../index";
 
 const router = express.Router();
-router.get("/", async function (req, res) {
+router.get("/", async function (req, res, next) {
 	try {
 		res.render("index", {
 			totalServers: (
@@ -19,14 +19,8 @@ router.get("/", async function (req, res) {
 			support: supportInvite,
 			invite: `https://discord.com/oauth2/authorize?client_id=${user.id}&permissions=8&scope=bot`,
 		});
-	} catch (err) {
-		log.error(err);
-		return res.status(500).render("error", {
-			username: user.username,
-			avatar: user.avatarURL,
-			code: 500,
-			description: "Internal Server Error",
-		});
+	} catch (error) {
+		next(error);
 	}
 });
 
