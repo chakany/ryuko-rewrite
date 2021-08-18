@@ -2,9 +2,11 @@ import Handler, { HandlerOptions } from "../Handler";
 import Command from "./Command";
 import {
 	CommandInteraction,
-	ApplicationCommandData,
+	ChatInputApplicationCommandData,
 	Snowflake,
 	TextChannel,
+	ApplicationCommandSubGroupData,
+	ApplicationCommandSubCommandData,
 } from "discord.js";
 import Constants from "../../Constants";
 
@@ -158,10 +160,10 @@ export default class CommandHandler extends Handler {
 	}
 
 	public async registerSlashCommands() {
-		const commands: ApplicationCommandData[] = [];
+		const commands: ChatInputApplicationCommandData[] = [];
 
 		for (const category of this.categories.values()) {
-			let constructedCategory: ApplicationCommandData;
+			let constructedCategory: ChatInputApplicationCommandData;
 			if (category.id !== "default")
 				constructedCategory = {
 					name: category.id,
@@ -178,7 +180,9 @@ export default class CommandHandler extends Handler {
 							(option) => option.name == command.group!
 						)
 					)
-						constructedCategory!.options!.push({
+						constructedCategory!.options!.push(<
+							ApplicationCommandSubGroupData
+						>{
 							name: command.group,
 							description: command.description,
 							type: "SUB_COMMAND_GROUP",
@@ -193,16 +197,16 @@ export default class CommandHandler extends Handler {
 						});
 					else {
 						// There is an existing group
-						constructedCategory!
-							.options!.find(
+						(<ApplicationCommandSubGroupData>(
+							constructedCategory!.options!.find(
 								(option) => option.name == command.group!
-							)!
-							.options!.push({
-								name: command.name,
-								description: command.description,
-								type: "SUB_COMMAND",
-								options: command.options,
-							});
+							)
+						))!.options!.push(<ApplicationCommandSubCommandData>{
+							name: command.name,
+							description: command.description,
+							type: "SUB_COMMAND",
+							options: command.options,
+						});
 					}
 				} else if (command.categoryId == "default") {
 					commands.push({
@@ -211,7 +215,9 @@ export default class CommandHandler extends Handler {
 						options: command.options,
 					});
 				} else {
-					constructedCategory!.options!.push({
+					constructedCategory!.options!.push(<
+						ApplicationCommandSubCommandData
+					>{
 						name: command.name,
 						description: command.description,
 						type: "SUB_COMMAND",
