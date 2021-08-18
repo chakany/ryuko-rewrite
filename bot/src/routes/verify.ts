@@ -6,7 +6,7 @@ import Db from "../util/Db";
 
 const db = new Db();
 
-import { weblog, redis, user } from "../index";
+import { weblog as log, redis, user } from "../index";
 
 const {
 	clientId,
@@ -25,37 +25,29 @@ interface TokenResponse {
 }
 
 async function getTokens(code: any): Promise<TokenResponse> {
-	try {
-		const req = await axios.post(
-			"https://discord.com/api/oauth2/token",
-			new URLSearchParams({
-				client_id: clientId,
-				client_secret: clientSecret,
-				code,
-				grant_type: "authorization_code",
-				redirect_uri: `${siteUrl}/verify`,
-				scope: "identify",
-			})
-		);
-		return req.data;
-	} catch (error) {
-		throw new Error(error);
-	}
+	const req = await axios.post(
+		"https://discord.com/api/oauth2/token",
+		new URLSearchParams({
+			client_id: clientId,
+			client_secret: clientSecret,
+			code,
+			grant_type: "authorization_code",
+			redirect_uri: `${siteUrl}/verify`,
+			scope: "identify",
+		})
+	);
+	return req.data;
 }
 
 async function checkCaptcha(response: any): Promise<any> {
-	try {
-		const req = await axios.post(
-			"https://www.google.com/recaptcha/api/siteverify",
-			new URLSearchParams({
-				secret: recaptchaSecret,
-				response,
-			})
-		);
-		return req.data;
-	} catch (error) {
-		throw new Error(error);
-	}
+	const req = await axios.post(
+		"https://www.google.com/recaptcha/api/siteverify",
+		new URLSearchParams({
+			secret: recaptchaSecret,
+			response,
+		})
+	);
+	return req.data;
 }
 
 const router = express.Router();
@@ -122,7 +114,7 @@ router.get("/", async (req, res) => {
 					redirectUri: null,
 				});
 		} catch (error) {
-			weblog.error(error);
+			log.error(error);
 			res.status(500).render("error", {
 				username: user.username,
 				avatar: user.avatarURL,
@@ -206,7 +198,7 @@ router.post("/", async (req, res) => {
 			redis.removeVerification(req.body.state);
 		}
 	} catch (error) {
-		weblog.error(error);
+		log.error(error);
 		return res.status(500).render("error", {
 			username: user.username,
 			avatar: user.avatarURL,

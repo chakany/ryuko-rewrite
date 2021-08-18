@@ -2,12 +2,11 @@ import express from "express";
 
 const { supportInvite } = require("../../config.json");
 
-import { manager, weblog, user } from "../index";
+import { manager, weblog as log, user } from "../index";
 
 const router = express.Router();
 router.get("/", async function (req, res) {
 	try {
-		//if (process.env.NODE_ENV !== "production") {
 		res.render("index", {
 			totalServers: (
 				await manager.fetchClientValues("guilds.cache.size")
@@ -20,9 +19,14 @@ router.get("/", async function (req, res) {
 			support: supportInvite,
 			invite: `https://discord.com/oauth2/authorize?client_id=${user.id}&permissions=8&scope=bot`,
 		});
-		//} else res.sendFile(`${process.cwd()}/pages/index.html`);
 	} catch (err) {
-		weblog.error(err);
+		log.error(err);
+		return res.status(500).render("error", {
+			username: user.username,
+			avatar: user.avatarURL,
+			code: 500,
+			description: "Internal Server Error",
+		});
 	}
 });
 
