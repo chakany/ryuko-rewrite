@@ -12,7 +12,6 @@ import cookieParser from "cookie-parser";
 import homeRoute from "./routes/home";
 import wikiRoute from "./routes/wiki";
 import verifyRoute from "./routes/verify";
-import commandsRoute from "./routes/commands";
 
 const log = new Logger({
 	name: "manager",
@@ -63,7 +62,6 @@ manager.on("shardCreate", (shard) => {
 		webserver.use("/", homeRoute);
 		webserver.use("/wiki", wikiRoute);
 		webserver.use("/verify", verifyRoute);
-		webserver.use("/commands", commandsRoute);
 
 		// This should always be last
 		webserver.get("*", function (req, res) {
