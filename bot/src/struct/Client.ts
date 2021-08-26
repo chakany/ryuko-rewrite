@@ -4,6 +4,9 @@ import {
 	Guild,
 	TextChannel,
 	Permissions,
+	Snowflake,
+	Collection,
+	VoiceChannel,
 } from "discord.js";
 import {
 	Client as HandlerClient,
@@ -22,6 +25,16 @@ import Logger from "./Logger";
 declare module "@ryuko/handler" {
 	interface Client {
 		config: typeof config;
+		voiceLobbies: Collection<
+			Snowflake,
+			Collection<
+				Snowflake,
+				{
+					channel: VoiceChannel;
+					owner: Snowflake;
+				}
+			>
+		>;
 		db: Db;
 		guildSettings: Settings;
 		log: Logger;
@@ -36,6 +49,16 @@ declare module "@ryuko/handler" {
 
 export default class Client extends HandlerClient {
 	public config: typeof config;
+	public voiceLobbies: Collection<
+		Snowflake,
+		Collection<
+			Snowflake,
+			{
+				channel: VoiceChannel;
+				owner: Snowflake;
+			}
+		>
+	>;
 	public db: Db;
 	public guildSettings: Settings;
 	public log: Logger;
@@ -46,10 +69,15 @@ export default class Client extends HandlerClient {
 
 	constructor() {
 		super({
-			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+			intents: [
+				Intents.FLAGS.GUILDS,
+				Intents.FLAGS.GUILD_MESSAGES,
+				Intents.FLAGS.GUILD_VOICE_STATES,
+			],
 		});
 
 		this.config = config;
+		this.voiceLobbies = new Collection();
 		this.db = new Db();
 		this.guildSettings = new Settings(this.db.guilds);
 		this.log = new Logger({
