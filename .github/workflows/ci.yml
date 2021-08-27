@@ -19,7 +19,5 @@ jobs:
                   node-version: "16"
             - name: "Install Dependencies"
               run: yarn
-            - name: "Build Handler"
-              run: cd handler && yarn build
-            - name: "Build Bot"
-              run: cd bot && yarn build
+            - name: "Build"
+              run: yarn build
