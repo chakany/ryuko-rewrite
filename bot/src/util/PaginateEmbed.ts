@@ -4,7 +4,7 @@ import {
 	ButtonInteraction,
 	MessageActionRow,
 } from "discord.js";
-import Client from "./Client";
+import Client from "../struct/Client";
 
 export default class PaginateEmbed {
 	private embed: MessageEmbed;

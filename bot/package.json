@@ -5,6 +5,7 @@
 	"scripts": {
 		"start": "cross-env NODE_ENV=production node . | bunyan -L -o short",
 		"dev": "ts-node-dev --transpile-only --deps --respawn src/index.ts | bunyan -L -o long",
+		"style": "sass src/styles:app/static/styles",
 		"watch": "sass --watch src/styles:app/static/styles"
 	},
 	"devDependencies": {

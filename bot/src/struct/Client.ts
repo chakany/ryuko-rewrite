@@ -16,7 +16,7 @@ const emoji = require("../../emojis.json");
 import Listener from "./Listener";
 import Command from "./Command";
 import Db from "../util/Db";
-import Settings from "./Settings";
+import Settings from "../util/Settings";
 import Logger from "./Logger";
 
 declare module "@ryuko/handler" {

@@ -1,6 +1,6 @@
 import Command from "../../../struct/Command";
 import { CommandInteraction, Permissions } from "discord.js";
-import PaginateEmbed from "../../../struct/PaginateEmbed";
+import PaginateEmbed from "../../../util/PaginateEmbed";
 
 export default class FilterListCommand extends Command {
 	constructor() {
