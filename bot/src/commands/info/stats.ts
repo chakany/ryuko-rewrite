@@ -24,7 +24,7 @@ export default class StatsCommand extends Command {
 						},
 						fields: [
 							{
-								name: "Guilds",
+								name: "Servers",
 								value: `\`${(
 									await this.client!.shard!.fetchClientValues(
 										"guilds.cache.size"
