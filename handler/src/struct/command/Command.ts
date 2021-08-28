@@ -14,6 +14,7 @@ export interface CommandOptions extends ModuleOptions {
 	nsfw?: boolean;
 	clientPermissions?: bigint[];
 	userPermissions?: bigint[];
+	ephemeral?: boolean;
 }
 
 export default abstract class Command extends Module {
@@ -22,9 +23,10 @@ export default abstract class Command extends Module {
 	public group: string | undefined;
 	public options: ApplicationCommandOptionData[];
 	public ownerOnly: boolean;
-	public nsfw?: boolean;
+	public nsfw: boolean;
 	public clientPermissions: bigint[];
 	public userPermissions: bigint[];
+	public ephemeral: boolean;
 
 	constructor(
 		id: string,
@@ -38,6 +40,7 @@ export default abstract class Command extends Module {
 			clientPermissions = [],
 			userPermissions = [],
 			nsfw = false,
+			ephemeral = false,
 		}: CommandOptions
 	) {
 		super(id, {
@@ -52,6 +55,7 @@ export default abstract class Command extends Module {
 		this.clientPermissions = clientPermissions;
 		this.userPermissions = userPermissions;
 		this.nsfw = nsfw;
+		this.ephemeral = ephemeral;
 	}
 
 	abstract exec(interaction: Interaction): any | Promise<any>;

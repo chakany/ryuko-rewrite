@@ -68,6 +68,11 @@ export default class CommandHandler extends Handler {
 				interaction
 			);
 
+		// Defer, optionally make it epherameral.
+		await interaction.deferReply({
+			ephemeral: command.ephemeral,
+		});
+
 		if (!(await this.runInhibitors(interaction, command))) return;
 
 		this.emit(

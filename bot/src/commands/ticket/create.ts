@@ -12,6 +12,7 @@ export default class TicketCreateCommand extends Command {
 			name: "create",
 			description: "Create a new Ticket",
 			category: "ticket",
+			ephemeral: true,
 			clientPermissions: [Permissions.FLAGS.MANAGE_CHANNELS],
 		});
 	}
@@ -133,12 +134,7 @@ export default class TicketCreateCommand extends Command {
 		});
 
 		await interaction.editReply({
-			content: `Ticket Opened!`,
-		});
-
-		await interaction.followUp({
-			content: `You can access it in ${channel.toString()}`,
-			ephemeral: true,
+			content: `Ticket Opened, it is accessable in ${channel.toString()}`,
 		});
 	}
 }

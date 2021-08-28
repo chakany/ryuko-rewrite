@@ -13,8 +13,6 @@ export default class InteractionCreateListener extends Listener {
 		if (!interaction.isCommand()) return;
 		if (!interaction.inGuild()) return;
 
-		await interaction.deferReply();
-
 		this.client!.commandHandler.handle(interaction);
 	}
 }
